@@ -23,7 +23,7 @@
                 <div id="score"></div>
                 <div id="words"></div>
                 <div id="typing-area">
-                    <input type="text" id="typing-input" @input="onType()" placeholder="Start typing..." autocomplete="off" spellcheck="false" tabindex="2" autofocus>
+                    <input type="text" id="typing-input" @input="onType" placeholder="Start typing..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" tabindex="2" autofocus>
                     <button id="redo" tabindex="1">Redo</button>
                 </div>
             </div>
@@ -38,8 +38,9 @@ export default {
     name: "Typing",
     data: function() {
         return {
-            time: null,
-            type: null
+            time: 0,
+            type: null,
+            timerStart: true
         }
     },
     mounted() {
@@ -72,18 +73,54 @@ export default {
                 document.getElementById("score").innerHTML = `${amt}s`;
             }
         },
-        onType() {
-            console.log("started")
-            if (this.type === "time") {
-                console.time('looper');
+        onType(event) {
+            let words = document.getElementById("words").innerText.split(" ");
+            let keys = []
+            let wordIndex = 0;
+            let charIndex = 0;
+
+            if (this.type === "time" && this.timerStart && this.time > 0) {
+                this.timerStart = false;
+
+                if (event.data == words[wordIndex][charIndex]) {
+                    keys.push(event.data)
+                    words[wordIndex] = `<em class="correct">${words[wordIndex]}</em>`
+                    document.getElementById("words").innerHTML = words.join(" ");
+                    charIndex++;
+                } else {
+                    words[wordIndex] = `<em class="wrong">${words[wordIndex]}</em>`
+                    document.getElementById("words").innerHTML = words.join(" ");
+                    charIndex++;
+                }
                 const countdown = setInterval(() => {
                     this.time -= 1;
                     document.getElementById("score").innerHTML = `${this.time}s`;
-                    if (this.time === 0) {
+                    if (this.time <= 0) {
+                        document.getElementById("score").innerHTML = "0s";
+                        this.timerStart = true;
                         clearInterval(countdown)
                     }
-                    console.timeLog('looper');
             }, 1000)
+            } else if (!this.timerStart) {
+                keys.push(event.data)
+                console.log(event.data, words[wordIndex][charIndex])
+                if (event.data == words[wordIndex][charIndex]) {
+                    words[wordIndex] = `<em class="correct">${words[wordIndex]}</em>`
+                    console.log("DUMMY")
+                    charIndex++;
+                    document.getElementById("words").innerHTML = words.join(" ");
+                } else if (event.data == " ") {
+                    wordIndex++;
+                    charIndex = 0;
+                    document.getElementById("typing-input").value = "";
+                } else if (event.data == null) {
+                    console.log("lol")
+                } else {
+                    words[wordIndex] = `<em class="wrong">${words[wordIndex]}</em>`
+                    console.log("DUMMY 2")
+                    charIndex++;
+                    document.getElementById("words").innerHTML = words.join(" ");
+                }
             }
         },
     }

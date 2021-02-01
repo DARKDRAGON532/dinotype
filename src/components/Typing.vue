@@ -111,11 +111,11 @@ export default {
                 this.charIndex++
                 this.currentWord += char;
                 this.correctChars++;
-                this.htmlWords[this.wordIndex] = `<div class="correct">${this.words[this.wordIndex]}</div>`
+                this.htmlWords[this.wordIndex] = `<em class="correct">${this.words[this.wordIndex]}</em>`
                 document.getElementById("words").innerHTML = this.htmlWords.join(" ");
             } else if (char == " ") {
                 if (this.currentWord != this.words[this.wordIndex]) {
-                   this.htmlWords[this.wordIndex] = `<div class="wrong">${this.words[this.wordIndex]}</div>`
+                   this.htmlWords[this.wordIndex] = `<em class="wrong">${this.words[this.wordIndex]}</em>`
                    document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                 } else {
                     this.correctWords++;
@@ -136,17 +136,19 @@ export default {
                 console.log(this.currentWord.charAt(this.charIndex), this.words[this.wordIndex][this.charIndex])
                 if (this.currentWord[this.charIndex] == this.words[this.wordIndex][this.charIndex]) {
                     this.charIndex++;
-                    this.htmlWords[this.wordIndex] = `<div class="correct">${this.words[this.wordIndex]}</div>`
+                    if (!this.htmlWords[this.wordIndex].includes('class="wrong"')) {
+                        this.htmlWords[this.wordIndex] = `<em class="correct">${this.words[this.wordIndex]}</em>`
+                    }
                     document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                 } else {
                     this.charIndex++;
-                    this.htmlWords[this.wordIndex] = `<div class="wrong">${this.words[this.wordIndex]}</div>`
+                    this.htmlWords[this.wordIndex] = `<em class="wrong">${this.words[this.wordIndex]}</em>`
                     document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                 }
             } else {
                 this.charIndex++;
                 this.currentWord += char;
-                this.htmlWords[this.wordIndex] = `<div class="wrong">${this.words[this.wordIndex]}</div>`
+                this.htmlWords[this.wordIndex] = `<em class="wrong">${this.words[this.wordIndex]}</em>`
                 document.getElementById("words").innerHTML = this.htmlWords.join(" ");
             }
             

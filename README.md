@@ -15,7 +15,7 @@ npm run serve
 npm run build
 ```
 
-#DinoType
+# DinoType
 
 [DinoType](https://www.dinotype.ml/)
 

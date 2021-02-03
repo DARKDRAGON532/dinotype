@@ -1,4 +1,4 @@
-# dinotype
+# DinoType
 
 ## Project setup
 ```
@@ -15,10 +15,8 @@ npm run serve
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+#DinoType
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[DinoType](https://www.dinotype.ml/)
+
+DinoType is a minimalistic typing website made by DARKDRAGON532.

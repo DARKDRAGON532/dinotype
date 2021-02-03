@@ -24,7 +24,7 @@
                 <div id="words"></div>
                 <div id="typing-area">
                     <input type="text" id="typing-input" @input="onType" placeholder="Start typing..." spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" tabindex="2" autofocus>
-                    <button id="redo" tabindex="1">Redo</button>
+                    <button id="redo" tabindex="1" @click="redo()">Redo</button>
                 </div>
             </div>
         </div>
@@ -39,8 +39,8 @@ export default {
     data: function() {
         return {
             time: 0,
-            testTime: 0,
-            type: null,
+            testValue: 50,
+            type: "word",
             timerStart: true,
             words: null,
             htmlWords: null,
@@ -48,10 +48,14 @@ export default {
             wordIndex: 0,
             charIndex: 0,
             correctChars: 0,
-            correctWords: 0
+            correctWords: 0,
+            completedWords: 0
         }
     },
     mounted() {
+        document.onkeydown = e => {
+            if (e.key == "Escape") {this.redo()}
+        }
         this.set(50, 'word')
     },
     methods: {
@@ -65,13 +69,15 @@ export default {
                     words += wordsList["english"][index] + " "
                 }
                 this.htmlWords = words.split(" ")
+                this.time = 0
+                this.testValue = parseInt(amt)
                 document.getElementById("words").innerHTML = words;
                 document.getElementById("score").innerHTML = `0/${amt}`;
             } 
             else if (type === "time") {
                 console.log(amt, type) 
                 let words = ""
-                this.testTime = parseInt(amt);
+                this.testValue = parseInt(amt);
                 this.time = parseInt(amt);
                 this.type = type;
 
@@ -96,28 +102,45 @@ export default {
                     if (this.time <= 0) {
                         document.getElementById("score").innerHTML = "0s";
                         this.timerStart = true;
-                        document.getElementById("score").innerHTML = `${(this.correctChars/5)/(this.testTime/60)} WPM`
+                        document.getElementById("score").innerHTML = `${Math.round((this.correctChars/5)/(this.testValue/60))} WPM`
                         clearInterval(countdown)
                     }
             }, 1000)
+            } else if (this.type === "word" && this.timerStart) {
+                this.timerStart = false;
+                this.checkWord(event.data)
+                global.countdown = setInterval(() => {
+                    this.time += 1;
+                    if (this.completedWords == this.testValue) {
+                        this.timerStart = true;
+                        document.getElementById("score").innerHTML = `${Math.round((this.correctChars/5)/(this.testValue/60))} WPM`
+                        clearInterval(global.countdown)
+                    }
+            }, 1000)
             } else if (!this.timerStart) {
-                // console.log(event.data, this.words[this.wordIndex][this.charIndex])
                 this.checkWord(event.data)
             }
         },
         checkWord(char) {
+            if (document.getElementById("typing-input").value == "") {
+                this.currentWord = ""
+                this.charIndex = 0
+                this.htmlWords[this.wordIndex] = this.words[this.wordIndex]
+                document.getElementById("words").innerHTML = this.htmlWords.join(" ");
+                return
+            }
             this.words = document.getElementById("words").innerText.split(" ");
             if (char == this.words[this.wordIndex][this.charIndex]) {
                 this.charIndex++
                 this.currentWord += char;
                 this.correctChars++;
-                this.htmlWords[this.wordIndex] = `<em class="correct">${this.words[this.wordIndex]}</em>`
-                document.getElementById("words").innerHTML = this.htmlWords.join(" ");
             } else if (char == " ") {
                 if (this.currentWord != this.words[this.wordIndex]) {
                    this.htmlWords[this.wordIndex] = `<em class="wrong">${this.words[this.wordIndex]}</em>`
                    document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                 } else {
+                    this.htmlWords[this.wordIndex] = `<em class="correct">${this.words[this.wordIndex]}</em>`
+                    document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                     this.correctWords++;
                 }
                 this.completedWords++;
@@ -125,20 +148,24 @@ export default {
                 this.charIndex = 0;
                 this.currentWord = ""
                 document.getElementById("typing-input").value = "";
+                if (this.type == "word") {
+                    if (this.completedWords == 10) {
+                        this.timerStart = true;
+                        document.getElementById("score").innerHTML = `${Math.round((this.correctChars/5)/(this.testValue/60))} WPM`
+                        clearInterval(global.countdown)    
+                    }
+                    document.getElementById("score").innerHTML = `${this.completedWords}/${this.testValue}`;
+                }
             } else if (char == null) {
                 this.charIndex -= 2;
-                if (this.charIndex < 0) {
-                    this.charIndex = 0;
-                }
+                this.charIndex = this.charIndex < 0 ? 0 : this.charIndex
                 this.currentWord = this.currentWord.substring(0, this.currentWord.length - 1)
                 console.log(this.currentWord)
                 console.log(this.charIndex)
-                console.log(this.currentWord.charAt(this.charIndex), this.words[this.wordIndex][this.charIndex])
+                console.log(this.currentWord[this.charIndex], this.words[this.wordIndex][this.charIndex])
                 if (this.currentWord[this.charIndex] == this.words[this.wordIndex][this.charIndex]) {
                     this.charIndex++;
-                    if (!this.htmlWords[this.wordIndex].includes('class="wrong"')) {
-                        this.htmlWords[this.wordIndex] = `<em class="correct">${this.words[this.wordIndex]}</em>`
-                    }
+                    this.htmlWords[this.wordIndex] = this.words[this.wordIndex]
                     document.getElementById("words").innerHTML = this.htmlWords.join(" ");
                 } else {
                     this.charIndex++;
@@ -152,6 +179,19 @@ export default {
                 document.getElementById("words").innerHTML = this.htmlWords.join(" ");
             }
             
+        },
+        redo() {
+            this.timerStart = true
+            this.words = null
+            this.htmlWords = null
+            this.currentWord = ""
+            this.wordIndex = 0
+            this.charIndex = 0
+            this.correctChars = 0
+            this.correctWords = 0
+            this.completedWords = 0
+            document.getElementById("typing-input").value = ""
+            this.set(this.testValue, this.type)
         }
     }
 }
@@ -162,16 +202,35 @@ export default {
         margin-top: 5vh;
     }
 
+    #redo {
+        border: 1px solid #000;
+        background-color: #000;
+        border-radius: 5px;
+        padding: 3px;
+        transition: background-color 0.5s;
+    }
+
+    #redo:hover {
+        cursor: pointer;
+        background-color: #111111;
+    }
+
+    #typing-input {
+        border: none;
+        outline: none;
+    }
+
     #words {
         display: inline-block;
         padding: 10px;
-        font-size: 18px;
+        font-size: 24px;
         max-width: 50vw;
+        max-height: 50vh;
     }
 
     #score {
         margin-bottom: 5vh;
-        font-size: 48px;
+        font-size: 64px;
     }
 
     #config span {

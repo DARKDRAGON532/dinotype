@@ -149,12 +149,11 @@ export default {
                 this.currentWord = ""
                 document.getElementById("typing-input").value = "";
                 if (this.type == "word") {
-                    if (this.completedWords == 10) {
+                    if (this.completedWords == this.testValue) {
                         this.timerStart = true;
                         document.getElementById("score").innerHTML = `${Math.round((this.correctChars/5)/(this.testValue/60))} WPM`
                         clearInterval(global.countdown)    
-                    }
-                    document.getElementById("score").innerHTML = `${this.completedWords}/${this.testValue}`;
+                    } else {document.getElementById("score").innerHTML = `${this.completedWords}/${this.testValue}`;}
                 }
             } else if (char == null) {
                 this.charIndex -= 2;

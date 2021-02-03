@@ -12,8 +12,7 @@ cd docs
 # if you are deploying to a custom domain
 echo 'www.dinotype.ml' > CNAME
 
-git init
-git add -A
+git add docs
 git commit -m 'deploy'
 
 

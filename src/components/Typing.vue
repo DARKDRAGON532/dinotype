@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     set(amt, type) {
+      this.redo(true);
       if (type === "word") {
         console.log(amt, type);
         let words = "";
@@ -108,7 +109,7 @@ export default {
       if (this.type === "time" && this.timerStart && this.time > 0) {
         this.timerStart = false;
         this.checkWord(event.data);
-        const countdown = setInterval(() => {
+        global.countdownTime = setInterval(() => {
           this.time -= 1;
           document.getElementById("score").innerHTML = `${this.time}s`;
           if (this.time <= 0) {
@@ -117,20 +118,20 @@ export default {
             document.getElementById("score").innerHTML = `${Math.round(
               this.correctChars / 5 / (this.testValue / 60)
             )} WPM`;
-            clearInterval(countdown);
+            clearInterval(global.countdownTime);
           }
         }, 1000);
       } else if (this.type === "word" && this.timerStart) {
         this.timerStart = false;
         this.checkWord(event.data);
-        global.countdown = setInterval(() => {
+        global.countdownWord = setInterval(() => {
           this.time += 1;
           if (this.completedWords == this.testValue) {
             this.timerStart = true;
             document.getElementById("score").innerHTML = `${Math.round(
               this.correctChars / 5 / (this.testValue / 60)
             )} WPM`;
-            clearInterval(global.countdown);
+            clearInterval(global.countdownWord);
           }
         }, 1000);
       } else if (!this.timerStart) {
@@ -174,7 +175,7 @@ export default {
             document.getElementById("score").innerHTML = `${Math.round(
               this.correctChars / 5 / (this.testValue / 60)
             )} WPM`;
-            clearInterval(global.countdown);
+            clearInterval(global.countdownWord);
           } else {
             document.getElementById(
               "score"
@@ -217,7 +218,7 @@ export default {
         document.getElementById("words").innerHTML = this.htmlWords.join(" ");
       }
     },
-    redo() {
+    redo(calledFromSet = false) {
       this.timerStart = true;
       this.words = null;
       this.htmlWords = null;
@@ -227,8 +228,12 @@ export default {
       this.correctChars = 0;
       this.correctWords = 0;
       this.completedWords = 0;
+      clearInterval(global.countdownTime);
+      clearInterval(global.countdownWord);
       document.getElementById("typing-input").value = "";
-      this.set(this.testValue, this.type);
+      if (!calledFromSet) {
+        this.set(this.testValue, this.type);
+      }
     },
   },
 };

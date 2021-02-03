@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(t,e,n){"use strict";n.r(e);var i=n("7a23"),a={class:"about"},c=Object(i["f"])("h1",null,"DinoType is a minimalistic typing site made by DARKDRAGON532",-1),b=Object(i["f"])("h2",null,[Object(i["f"])("a",{href:"https://github.com/DARKDRAGON532/dinotype",target:"_blank"},"GitHub")],-1);function o(t,e){return Object(i["o"])(),Object(i["d"])("div",a,[c,b])}const s={};s.render=o;e["default"]=s}}]);
+//# sourceMappingURL=about.e90736cf.js.map

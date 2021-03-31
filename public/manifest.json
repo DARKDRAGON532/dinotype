@@ -1,0 +1,16 @@
+{
+    "name": "DinoType",
+    "short_name": "DinoType",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#2c2f33",
+    "description": "A minimalistic typing website.",
+    "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        }
+    ]
+
+}

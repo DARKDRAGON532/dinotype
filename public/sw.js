@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 self.addEventListener('install', (e) => {
     self.skipWaiting()
   })

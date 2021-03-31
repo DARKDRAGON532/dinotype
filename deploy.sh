@@ -14,6 +14,6 @@ echo 'www.dinotype.ml' > CNAME
 cd -
 git add .
 git commit -m 'deploy'
-git push
+git push --force
 
 

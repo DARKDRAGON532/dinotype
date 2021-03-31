@@ -3,12 +3,12 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
   </div>
-  <router-view/>
+  <router-view />
 </template>
 
 <style>
 * {
-  background-color: #2C2F33;
+  background-color: #2c2f33;
   color: #878787;
 }
 
@@ -38,5 +38,4 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
-
 </style>

@@ -1,17 +1,17 @@
 <template>
   <div class="home">
-    <Typing/>
+    <Typing />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Typing from '../components/Typing.vue'
+import Typing from "../components/Typing.vue";
 
 export default {
-  name: 'Home',
+  name: "Home",
   components: {
-    Typing
-  }
-}
+    Typing,
+  },
+};
 </script>

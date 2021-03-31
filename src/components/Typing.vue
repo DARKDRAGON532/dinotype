@@ -47,7 +47,7 @@ const wordsList = require("../data/words.json");
 
 export default {
   name: "Typing",
-  data: function() {
+  data: function () {
     return {
       time: 0,
       testValue: 50,

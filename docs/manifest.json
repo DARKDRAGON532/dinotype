@@ -1,7 +1,7 @@
 {
     "name": "DinoType",
     "short_name": "DinoType",
-    "start_url": "/#",
+    "start_url": "https://www.dinotype.ml/#/",
     "display": "standalone",
     "background_color": "#2c2f33",
     "description": "A minimalistic typing website.",

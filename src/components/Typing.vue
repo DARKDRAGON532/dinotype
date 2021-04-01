@@ -75,7 +75,6 @@ export default {
     set(amt, type) {
       this.redo(true);
       if (type === "word") {
-        console.log(amt, type);
         let words = "";
         this.type = type;
         for (let i = 0; i < amt; i++) {
@@ -88,7 +87,6 @@ export default {
         document.getElementById("words").innerHTML = words;
         document.getElementById("score").innerHTML = `0/${amt}`;
       } else if (type === "time") {
-        console.log(amt, type);
         let words = "";
         this.testValue = parseInt(amt);
         this.time = parseInt(amt);
@@ -188,12 +186,6 @@ export default {
         this.currentWord = this.currentWord.substring(
           0,
           this.currentWord.length - 1
-        );
-        console.log(this.currentWord);
-        console.log(this.charIndex);
-        console.log(
-          this.currentWord[this.charIndex],
-          this.words[this.wordIndex][this.charIndex]
         );
         if (
           this.currentWord[this.charIndex] ==

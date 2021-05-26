@@ -1,4 +1,6 @@
-# DinoType
+# [DinoType](https://www.dinotype.ml/)
+
+DinoType is a minimalistic typing website made by DARKDRAGON532.
 
 ## Project setup
 
@@ -17,9 +19,3 @@ npm run serve
 ```
 npm run build
 ```
-
-# DinoType
-
-[DinoType](https://www.dinotype.ml/)
-
-DinoType is a minimalistic typing website made by DARKDRAGON532.
